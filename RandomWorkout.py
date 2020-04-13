@@ -1,36 +1,57 @@
 import random
 import csv
 from datetime import datetime
-
+# import exercises
 #List of all exercises
 MuscleGroups = ['Calves', 'Hamstrings', 'Quads', 'Glutes', 'Abs', 'Biceps', 'Triceps', 'Chest', 'Shoulders', 'Lats']
-ExerciseDict = {'Calves':['Standing Calf Raises', 'Incline Walk/Run'],
-                'Hamstrings':['Romanian Dead Lifts', 'Single Leg Hip Raise','Squat Jumps'],
-                'Quads' : ['Wall Sit','Pistol Squat', 'Lunges', 'Bulgarian Split Squat'],
-                'Glutes' : ['Squats', 'Front Squats', 'Step Ups', 'Side Lunges' ],
-                'Abs' : ['Mountain Climbers','Planks','Lying Leg Lifts', 'Bicycle Crunches', 'Regular Crunches','Russian Twist','Oblique Crunches','Plate Lowers - Legs off the ground','Reverse Crunches', 'Hanging Knee Lifts','Hanging Knee Twists','Jack Knives'],
-                'Biceps' : ['Supinated Rows','EZ-Bar Curls Wide', 'EZ-Bar Curls Close', 'Hammer Curls', 'Close Grip Chin-ups', 'Hammer-Supinated Curls'],
-                'Triceps' : ['Tricep Kickback', 'Single Arm Dips', 'Powerbombs', 'Skull-Crushers'],
-                'Chest' : ['Pushups', 'Pushups in a circle', '90 degree holds', 'Decline Pushups','Slow Negative Explosive Pushups', 'Dumbbell Chest Press'],
-                'Shoulders' : ['Pike Pushups', 'Overhead Press', 'Arnold Press', 'Front Raise','Horizontal Raise'],
-                'Back/Lats' : ['Dumbbell Lat Pulls', 'Barbell Rows', 'Pull-ups', 'Renegade Row Reaches', 'Dumbbell Pull-Overs'],
-                'Extra' : ['Scalp Pushups', 'Shrugs', 'Upright Row'],
+                #Exercise, Equipment needed, Movement Type
+ExerciseDict = {'Calves':[('Standing Calf Raises','Bodyweight','Compound'), ('Treadmill/Outside Run','Equipment','Timed')],
+                'Hamstrings':[('Romanian Dead Lifts','Equipment','Compound'), ('Single Leg Hip Raise','Bodyweight','Single'),('Squat Jumps','Bodyweight','Compound')],
+                'Quads' : [('Wall Sit','Bodyweight','Compound'),('Pistol Squat','Bodyweight','Single'), ('Lunges','Bodyweight','Single'), ('Bulgarian Split Squat','Bodyweight','Single')],
+                'Glutes' : [('Squats','Bodyweight','Compound'), ('Front Squats','Equipment','Compound'), ('Step Ups','Bodyweight','Single'), ('Side Lunges','Bodyweight','Single'),('Glute Bridge','Bodyweight','Compound') ],
+                'Abs' : [('Jog in Place','Bodyweight','Timed'),('High Knees','Bodyweight','Timed'),('Mountain Climbers','Bodyweight','Timed'),('Planks','Bodyweight','Timed'),('Lying Leg Lifts','Bodyweight','Compound'), ('Bicycle Crunches','Bodyweight','Timed'), ('Regular Crunches','Bodyweight','Compound'),('Russian Twist','Bodyweight','Single'),('Oblique Crunches','Bodyweight','Single'),('Crunch and Lower','Equipment','Compound'),('Reverse Crunches','Bodyweight','Compound'), ('Hanging Knee Lifts','Equipment','Compound'),('Hanging Knee Twists','Bodyweight','Single'),('Jack Knives','Bodyweight','Compound')],
+                'Biceps' : [('Supinated Rows','Equipment','Compound'),('EZ-Bar Curls Wide','Equipment','Compound'), ('EZ-Bar Curls Close','Equipment','Compound'), ('Hammer Curls','Equipment','Single'), ('Close Grip Chin-ups','Equipment','Compound'), ('Hammer-Supinated Curls','Equipment','Single')],
+                'Triceps' : [('Tricep Kickback','Equipment','Single'), ('Single Arm Dips','Bodyweight','Single'), ('Powerbombs','Equipment','Compound'), ('Skull-Crushers','Equipment','Compound'), ('Counter Dips','Bodyweight','Compound'),('Bench Dips','Bodyweight','Compound')],
+                'Chest' : [('Pushups','Bodyweight','Compound'), ('Pushups in a circle','Bodyweight','Compound'), ('90 degree holds','Bodyweight','Timed'), ('Decline Pushups','Bodyweight','Compound'),('Slow Negative Explosive Pushups','Bodyweight','Compound'), ('Dumbbell Chest Press','Equipment','Compound')],
+                'Shoulders' : [('Pike Pushups','Bodyweight','Compound'), ('Overhead Press','Equipment','Compound'), ('Arnold Press','Equipment','Compound'), ('Front Raise','Equipment','Compound'),('Horizontal Raise','Equipment','Single'),('Lat-Restricted Horizontal Raise','Bodyweight','Single')],
+                'Back/Lats' : [('Dumbbell Lat Pulls','Equipment','Single'), ('Barbell Rows','Equipment','Compound'), ('Pull-ups','Equipment','Compound'), ('Renegade Row Reaches','Equipment','Single'), ('Dumbbell Pull-Overs','Equipment','Compound')],
+                'Extra' : [('Scalp Pushups','Bodyweight','Compound'), ('Shrugs','Equipment','Compound'), ('Upright Row','Equipment','Compound')],
 }
 
+#Adds all exercises that are bodyweight along with their Movement Type
+exerciseList = []
+for k,vlist in ExerciseDict.items():
+    for exercise in vlist:
+        if exercise[1] == 'Bodyweight':
+            exerciseList.append((exercise[0],exercise[1],exercise[2]))
+
+
+
+
 finishedWorkout = False
+typeText = ' repetitions.'
 
 while finishedWorkout == False:  
-    exerciseList = ['Standing Calf Raises','Squat Jumps','Single Leg Hip Raise','Wall Sit','Pistol Squat', 'Lunges', 'Bulgarian Split Squat','Squats','Step Ups', 'Side Lunges','Mountain Climbers','Planks','Lying Leg Lifts', 'Bicycle Crunches', 'Regular Crunches','Russian Twist','Oblique Crunches','Reverse Crunches','Jack Knives','Pushups', 'Pushups in a circle', '90 degree holds', 'Decline Pushups','Slow Negative Explosive Pushups','Scalp Pushups','Pike Pushups']
+    #this section of code determines the amount of reps or seconds to perform each exercise
     randomExercise = random.choice(exerciseList)
-    randomRange = random.randint(1,21)
+    if randomExercise[1] == 'Timed':
+        randomRange = random.randint(20,60)
+        typeText= ' seconds.'
+    elif randomExercise[1] == 'Single':
+        randomRange = random.randint(5,12)
+        typeText= ' repetitions.'
+    else:
+        randomRange = random.randint(5,21)
+        typeText= ' repetitions.'
 
-    print(f'Your random exercise is {randomExercise} for {randomRange}')
+    print(f'Your random exercise is {randomExercise[0]} for {randomRange}{typeText}')
     print('')
 
 
-    a_file = open("../../sample.csv", "a",newline='')
+    a_file = open("../../ExerciseHistory.csv", "a",newline='')
+    # a_file = open("Testing.csv", "a",newline='')
     writer = csv.writer(a_file)
-    writer.writerow([randomExercise, randomRange, datetime.now()])
+    writer.writerow([randomExercise[0],randomExercise[1],randomExercise[2], randomRange, datetime.now()])
 
     a_file.close()
 
